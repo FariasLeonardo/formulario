@@ -136,6 +136,18 @@
                     <span class="erro-mensagem" id="erro-trilha"></span>
                 </fieldset>
 
+                <fieldset class="formulario__credenciais">
+                    <h2>Credenciais de Acesso</h2>
+                    <label for="idUsuario">ID do Usuário
+                        <input type="text" id="idUsuario" name="idUsuario" placeholder="Digite seu ID de usuário" required>
+                        <span class="erro-mensagem" id="erro-idUsuario"></span>
+                    </label>
+                    <label for="senha">Senha
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+                        <span class="erro-mensagem" id="erro-senha"></span>
+                    </label>
+                </fieldset>
+
                 <fieldset class="formulario__termo">
                     <label>
                         <input type="checkbox" name="declaracao" id="declaracao" required>
@@ -151,14 +163,21 @@
                     <button type="button" class="save-btn">Salvar</button>
                     <button type="submit" class="submit-btn">Fazer Inscrição</button>
                 </fieldset>
+                
+                <fieldset class="formulario__mensagem" id="mensagem-sucesso" style="display: none;">
+                    <p id="mensagem-texto"></p>
+                    <button type="button" id="ok-btn" class="submit-btn">OK</button>
+                </fieldset>
+                    
             </form>
 
             <div class="imagens">
-                <img class="formulario__itens__imagem__estudante" src="./assets/imagem.svg" alt="Pessoa estudando com notebook">
-                <img class="formulario__itens__imagem__inova" src="./assets/trilha.svg" alt="Logo Programa Trilhas">
+                <img class="imagem__estudante" src="./assets/imagem.svg" alt="Pessoa estudando com notebook">
+                <img class="imagem__inova" src="./assets/trilha.svg" alt="Logo Programa Trilhas">
             </div>
         </section>
     </main>
+    <script src="auth.js" defer></script> 
     <script src="arquivo.js" defer></script>
 </body>
 </html>
