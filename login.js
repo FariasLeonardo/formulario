@@ -4,6 +4,13 @@ const loginSenhaInput = document.getElementById('loginSenha');
 const mensagemErroLogin = document.getElementById('mensagem-erro-login');
 const mensagemErroTexto = document.getElementById('mensagem-erro-texto');
 
+// Máscara para CPF no campo ID do Usuário
+loginIdUsuarioInput.addEventListener('input', function() {
+    let value = loginIdUsuarioInput.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    loginIdUsuarioInput.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+});
+
 // Adicionar depuração para verificar se os elementos foram encontrados
 console.log('mensagemErroLogin:', mensagemErroLogin);
 console.log('mensagemErroTexto:', mensagemErroTexto);
@@ -66,10 +73,12 @@ function validarLogin() {
 
     // Verificar se os campos estão preenchidos
     if (!loginIdUsuarioInput.value.trim()) {
-        exibirMensagemErro(loginIdUsuarioInput, 'O campo ID do Usuário é obrigatório.');
+        exibirMensagemErro(loginIdUsuarioInput, 'O campo ID do Usuário (CPF) é obrigatório.');
+        loginValido = false;   
+    } else if (!validarCPF(loginIdUsuarioInput.value.replace(/\D/g, ''))) { // Adicionado
+        exibirMensagemErro(loginIdUsuarioInput, 'Digite um CPF válido.');
         loginValido = false;
     }
-
     if (!loginSenhaInput.value.trim()) {
         exibirMensagemErro(loginSenhaInput, 'O campo Senha é obrigatório.');
         loginValido = false;
@@ -83,9 +92,9 @@ function validarLogin() {
         );
 
         if (!usuarioEncontrado) {
-            exibirMensagemErro(loginIdUsuarioInput, 'ID do Usuário ou senha incorretos.');
-            exibirMensagemErro(loginSenhaInput, 'ID do Usuário ou senha incorretos.');
-            exibirMensagemErroGeral('ID do Usuário ou senha incorretos. Tente novamente.');
+            exibirMensagemErro(loginIdUsuarioInput, 'ID do Usuário (CPF) ou senha incorretos.');
+            exibirMensagemErro(loginSenhaInput, 'ID do Usuário (CPF) ou senha incorretos.');
+            exibirMensagemErroGeral('ID do Usuário (CPF) ou senha incorretos. Tente novamente.');
             loginValido = false;
         }
     }
@@ -104,4 +113,19 @@ if (formLogin) {
             window.location.href = 'index.html'; // Redireciona para o formulário
         }
     });
+}
+
+//Função para validar cpf do ID do usuario
+function validarCPF(cpf) {
+    if (!cpf || cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += parseInt(cpf.charAt(i)) * (10 - i);
+    let remainder = 11 - (sum % 11);
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(cpf.charAt(9))) return false;
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += parseInt(cpf.charAt(i)) * (11 - i);
+    remainder = 11 - (sum % 11);
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    return remainder === parseInt(cpf.charAt(10));
 }

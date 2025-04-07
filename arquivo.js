@@ -50,6 +50,7 @@ cpfInput.addEventListener('input', function() {
     let value = cpfInput.value.replace(/\D/g, '');
     if (value.length > 11) value = value.slice(0, 11);
     cpfInput.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    idUsuarioInput.value = cpfInput.value; // Copia o CPF para o ID do Usuário
 });
 
 telefoneInput.addEventListener('input', function() {
@@ -139,13 +140,15 @@ function salvarDadosNoLocalStorage(completo = false) {
         if (usuarioIndex !== -1) {
             // Atualizar o usuário existente
             usuarios[usuarioIndex] = {
-                idUsuario: formData.idUsuario,
+                cpf: formData.cpf,
+                idUsuario: formData.cpf, // ID séra o cpf
                 senha: formData.senha
             };
         } else {
             // Criar um novo usuário
             usuarios.push({
-                idUsuario: formData.idUsuario,
+                cpf: formData.cpf,
+                idUsuario: formData.cpf, // ID séra o cpf
                 senha: formData.senha
             });
         }
@@ -164,7 +167,10 @@ function carregarDadosDoLocalStorage() {
             const formData = JSON.parse(dadosSalvos);
             if (formData.nome !== undefined) nomeInput.value = formData.nome;
             if (formData.nascimento !== undefined) nascimentoInput.value = formData.nascimento;
-            if (formData.cpf !== undefined) cpfInput.value = formData.cpf;
+            if (formData.cpf !== undefined) {
+                cpfInput.value = formData.cpf;
+                idUsuarioInput.value = formData.cpf; // Carrega o CPF no ID
+            }
             if (formData.sexo !== undefined) sexoInput.value = formData.sexo;
             if (formData.email !== undefined) emailInput.value = formData.email;
             if (formData.telefone !== undefined) telefoneInput.value = formData.telefone;
@@ -251,7 +257,7 @@ function limparMensagemErro(campo) {
 function validarFormulario() {
     let formularioValido = true;
 
-    const camposObrigatorios = formulario.querySelectorAll('[required]');
+    const camposObrigatorios = formulario.querySelectorAll('[required]:not(#idUsuario)');
     camposObrigatorios.forEach(campo => {
         limparMensagemErro(campo);
         if (!campo.value.trim() && campo.type !== 'file' && campo.type !== 'radio' && campo.type !== 'checkbox') {
@@ -282,10 +288,13 @@ function validarFormulario() {
         }
     }
 
-    if (cpfInput.value.trim() && !validarCPF(cpfInput.value.replace(/\D/g, ''))) {
-        exibirMensagemErro(cpfInput, 'Digite um CPF válido.');
-        formularioValido = false;
-    }
+    // Validação específica do CPF
+    if (cpfInput.value.trim()) {
+        if (!validarCPF(cpfInput.value.replace(/\D/g, ''))) {
+            exibirMensagemErro(cpfInput, 'Digite um CPF válido.');
+            formularioValido = false;
+        }
+    }    
 
     if (emailInput.value.trim() && !isValidEmail(emailInput.value.trim())) {
         exibirMensagemErro(emailInput, 'Digite um e-mail válido.');
@@ -340,11 +349,13 @@ function validarFormulario() {
         limparMensagemErro(checkboxDeclaracaoInput);
     }
 
-    if (idUsuarioInput.value.trim()) {
-        if (idUsuarioInput.value.length < 4) {
-            exibirMensagemErro(idUsuarioInput, 'O ID do usuário deve ter pelo menos 4 caracteres.');
-            formularioValido = false;
-        }
+    // Validação específica do idUsuario
+    if (!idUsuarioInput.value.trim()) {
+        exibirMensagemErro(idUsuarioInput, 'O campo "ID do Usuário" é obrigatório.');
+        formularioValido = false;
+    } else if (idUsuarioInput.value.trim() !== cpfInput.value.trim()) {
+        exibirMensagemErro(idUsuarioInput, 'O ID do Usuário deve ser igual ao CPF.');
+        formularioValido = false;
     }
 
     if (senhaInput.value.trim()) {
@@ -402,21 +413,28 @@ if (botaoInscricao) {
         event.preventDefault();
         botaoInscricao.disabled = true;
 
+        idUsuarioInput.value = cpfInput.value; // Força a cópia do CPF para idUsuario
+        console.log('Validando formulário...'); // Log para depuração
         if (validarFormulario()) {
+            console.log('Formulário válido, salvando dados...'); // Log para depuração
             const sucesso = salvarDadosNoLocalStorage(true);
+            console.log('Sucesso ao salvar:', sucesso); // Log para depuração
             if (sucesso) {
                 mensagemTexto.textContent = 'Inscrição realizada com sucesso!';
-                mensagemSucesso.style.display = 'block'; // Corrigido o typo
+                mensagemSucesso.style.display = 'block'; // Exibe a mensagem
+                console.log('Mensagem de sucesso exibida'); // Log para depuração
                 botaoSalvar.disabled = true;
                 botaoInscricao.disabled = true;
                 botaoCancelar.disabled = true;
                 setTimeout(() => {
-                    window.location.href = 'capa.html'; // Redireciona diretamente após 2 segundos
-                }, 2000); // Aguarda 2 segundos para o usuário ver a mensagem
+                    window.location.href = 'capa.html';
+                }, 2000);
             } else {
+                console.log('Falha ao salvar os dados'); // Log para depuração
                 botaoInscricao.disabled = false;
             }
         } else {
+            console.log('Formulário inválido'); // Log para depuração
             botaoInscricao.disabled = false;
         }
     });
@@ -427,3 +445,4 @@ if (okBtn) {
         window.location.href = 'capa.html';
     });
 }
+
