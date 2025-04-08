@@ -20,7 +20,7 @@ window.onload = function() {
         novaInscricaoBtn.style.display = 'block'; // Mostrar botão "Nova Inscrição"
         logoutBtn.style.display = loggedIn ? 'block' : 'none';
     } else {
-        statusInscricao.textContent = 'Bem-vindo ao processo de inscrição do TRILHAS INOVA-MA.';
+        statusInscricao.textContent = 'Bem-vindo à inscrição do TRILHAS INOVA-MA.';
         fazerInscricaoBtn.style.display = 'block';
         alterarInscricaoBtn.style.display = 'none';
         novaInscricaoBtn.style.display = 'none'; // Esconder botão "Nova Inscrição"

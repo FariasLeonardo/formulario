@@ -85,11 +85,12 @@ body {
 @media (max-width: 768px) {
     body {
         align-items: flex-end;
+        
     }
 
     #capa-imagem {
-        content: url('../assets/capa_mobile.jpg'); 
-        object-fit: cover; 
+        content: url('../assets/capa_tablet.png'); 
+         
     }
 
     .texto-ancora {
@@ -114,11 +115,12 @@ body {
 /* Configurações responsivas para celulares menores */
 @media (max-width: 480px) {
     body {
-        align-items: flex-end; 
+        align-items: flex-end;
+         
     }
 
     #capa-imagem {
-        content: url('../assets/capa_mobile.jpg'); 
+        content: url('../assets/capa_tablet.png'); 
         object-fit: cover; /
     }
 
@@ -126,7 +128,7 @@ body {
         width: 90%;
         padding: 10px;
         font-size: 12px;
-        margin-bottom: 15px; 
+        margin-bottom: 50px; 
     }
 
     #status-inscricao {
@@ -147,7 +149,7 @@ body {
         width: 95%;
         padding: 8px;
         font-size: 10px;
-        margin-bottom: 10px; /* Espaço mínimo na parte inferior */
+        margin-bottom: 40px; /* Espaço mínimo na parte inferior */
     }
 
     #status-inscricao {

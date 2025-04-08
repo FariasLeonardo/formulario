@@ -360,7 +360,9 @@ input[type="file"] {
 
 /* Configurações responsivas para tablets */
 @media (max-width: 768px) {
-    
+    body {
+        padding-bottom: 60px; 
+    }
 
     .formulario {
         width: 50%;
@@ -444,17 +446,21 @@ input[type="file"] {
     .formulario__botoes {
         justify-content: center;
         flex-wrap: wrap;
+        margin-bottom: 60px;
     }
 
     .formulario__botoes button {
         width: 100px;
         height: 44px;
         font-size: 14px;
+        
     }
 }
 
 /* Configurações responsivas para smartphones menores */
 @media (max-width: 480px) {
+    
+   
     .container {
         flex-direction: column-reverse;
     }
@@ -537,6 +543,7 @@ input[type="file"] {
     .terms {
         font-size: 12px;
         padding-left: 25px; /* Ajusta o padding para o checkbox */
+        
     }
 
     .formulario__termo input[type="checkbox"] {
@@ -550,5 +557,6 @@ input[type="file"] {
         width: 90px;
         height: 40px;
         font-size: 12px;
+        margin-bottom: 70px;
     }
 }
